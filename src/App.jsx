@@ -57,18 +57,18 @@ const Search = () => {
 }
 
 const List = (props) => (
-    <ul>
+    <table>
       {props.list.map((item) => (
-        <li key={item.objectID}>
-          <span>
+        <tr key={item.objectID}>
+          <td>
           <a href={item.url}>{item.title}</a>
-          </span>
-          <span>{item.author}</span>
-          <span>{item.num_comments}</span>
-         <span>{item.points}</span>
-        </li>
+          </td>
+          <td>{item.author}</td>
+          <td>{item.num_comments}</td>
+         <td>{item.points}</td>
+         </tr>
       ))}
-    </ul>
+    </table>
   );
 
 export default App
