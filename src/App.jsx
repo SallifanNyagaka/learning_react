@@ -13,6 +13,14 @@ const App = () => {
   
   const stories = [
     {
+      title: 'Title',
+      url: 'DOI',
+      author: 'Author',
+      num_comments: 'Comments',
+      points: 'Votes',
+      objectID: 0,
+    },
+    {
       title: 'React',
       url: 'https://reactjs.org/',
       author: 'Jordan Walke',
@@ -57,9 +65,10 @@ const Search = () => {
 }
 
 const List = (props) => (
-    <table>
+    <table border="1">
       {props.list.map((item) => (
         <tr key={item.objectID}>
+          <td>{item.title}</td>
           <td>
           <a href={item.url}>{item.title}</a>
           </td>
