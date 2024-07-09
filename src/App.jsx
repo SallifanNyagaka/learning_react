@@ -2,13 +2,15 @@ import { useState } from 'react'
 import * as React from 'react'
 import './App.css'
 
+//Making my own custom hook that runs Internally built hooks. What are hooks in React?
+const useStorageState = (key, initialState) => {
+  const [value, setValue] = React.useState(localStorage.getItem(key) || initialState); //hook that returns the current state of a cvalue
+  React.useEffect(()=>{localStorage.setItem(key, value)}, [value]); //hook to run localStorage side effect that stores the current state
+
+  return [value, setValue]
+}
 
 const App = () => {
-  
-  const welcome = {
-    greeting: 'Best books to read in 2024',
-    title: 'with their authors',
-  };
   
   const stories = [
     {
@@ -29,36 +31,37 @@ const App = () => {
     },
 ];
 
-const [searchTerm, setSearchTerm] = React.useState('');
+const [searchTerm, setSearchTerm] = useStorageState('search','');
 
 const handleSearch = (event) => {
   setSearchTerm(event.target.value);
-}
+} // this is a callback handler passed via props
   
 const searchedStories = stories.filter((story)=>{
   return story.title.toLowerCase().includes(searchTerm.toLowerCase());
-})
+  })
   return (
+    // props are passed as values to attributes in components here
     <div>
       <h1>My Hacker Stories</h1>
-      <Search onSearch={handleSearch} />
+      <Search search={searchTerm} onSearch={handleSearch} /> {/**passing searchterm and handlesearch via props to Search component */}
       <hr />
-      <List list={searchedStories}/>
+      <List list={searchedStories}/>  {/**Passing the filtered searchStories List via props to List component */}
     </div>  
   );
 }
 
-const Search = (props) => {
+const Search = ({search, onSearch}) => { //object destructuring to obtain search and onSearch properties via props as arrow function parameters. Normally it could be: {search, onSearch} = props
 
   return(
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text"  onChange={props.onSearch}/>
+      <input id="search" type="text"  onChange={onSearch} value={search}/>
     </div>
     );
 }
 
-const List = (props) => (
+const List = ({list}) => ( //destructring list
     <table border="1">
 
       <tr>
@@ -68,7 +71,7 @@ const List = (props) => (
         <th><b>Comments</b></th>
         <th><b>Votes</b></th>
       </tr>
-      {props.list.map((item) => (
+      {list.map((item) => (
         <tr key={item.objectID}>
           <td>{item.title}</td>
           <td>
